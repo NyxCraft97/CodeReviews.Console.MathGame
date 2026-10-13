@@ -1,55 +1,125 @@
 ﻿namespace mathGame;
-class Program 
+class Program
 {
-	public static void Main()
+	public static void Main ()
 	{
 		var active = true;
-		while(active)
+		while (active)
 		{
-			Console.WriteLine("=== MATH GAME ===");
-			Console.WriteLine("1. Addition");
-			Console.WriteLine("2. Subtraction");
-			Console.WriteLine("3. Multiplication");
-			Console.WriteLine("4. Division");
-			Console.WriteLine("5. Game History");
-			Console.WriteLine("0. Exit");
+			Console.WriteLine ("=== MATH GAME ===");
+			Console.WriteLine ("1. Addition");
+			Console.WriteLine ("2. Subtraction");
+			Console.WriteLine ("3. Multiplication");
+			Console.WriteLine ("4. Division");
+			Console.WriteLine ("5. Game History");
+			Console.WriteLine ("0. Exit");
 
-			Console.WriteLine("Please choose an option!");
-			string? option = Console.ReadLine();
+			Console.WriteLine ("Please choose an option!");
+			string? option = Console.ReadLine ();
 
 			switch (option)
 			{
 				case "1":
-					Console.WriteLine("You selected Addition.");
+					game ('+');
 					break;
 
 				case "2":
-					Console.WriteLine("You selected Subtraction.");
+					game ('-');
 					break;
 
 				case "3":
-					Console.WriteLine("You selected Multiplication.");
+					game ('*');
 					break;
 
 				case "4":
-					Console.WriteLine("You selected Division.");
+					game ('/');
 					break;
 
 				case "5":
-					Console.WriteLine("You selected Game History.");
+					Console.WriteLine ("You selected Game History.");
 					break;
 
 				case "0":
-					Console.WriteLine("Goodbye!");
+					Console.WriteLine ("Goodbye!");
 					active = false;
 					break;
 
 				default:
-					Console.WriteLine("Invalid option. Please try again.");
+					Console.WriteLine ("Invalid option. Please try again.");
 					break;
 			}
+		}
+	}
 
+	static void game (char choice)
+	{
+		Random random = new Random ();
 
+		int score = 0;
+		const int totalQuestions = 5;
+
+		for (int i = 0; i < totalQuestions; i++)
+		{
+			int num1, num2, correctAnswer;
+
+			switch (choice)
+			{
+				case '+':
+					num1 = random.Next (0, 101);
+					num2 = random.Next (0, 101);
+					correctAnswer = num1 + num2;
+					break;
+
+				case '-':
+					num1 = random.Next (0, 101);
+					num2 = random.Next (0, 101);
+					correctAnswer = num1 - num2;
+					break;
+
+				case '*':
+					num1 = random.Next (0, 101);
+					num2 = random.Next (0, 101);
+					correctAnswer = num1 * num2;
+					break;
+
+				case '/':
+					//generates new numbers until a valid combination shows up
+					do
+					{
+						num1 = random.Next (0, 101);
+						num2 = random.Next (0, 101);
+					} while (num2 == 0 || num1 % num2 != 0);
+					correctAnswer = num1 / num2;
+					break;
+				
+				//i will be incredibly surprised if somehow this part triggers.
+				default:
+					Console.WriteLine ("Unknown game mode.");
+					return;
+			}
+
+			Console.WriteLine ($"Question {i+1}: {num1} {choice} {num2} = ?");
+			Console.Write ("Your answer: ");
+			string? input = Console.ReadLine ();
+
+			if (int.TryParse (input, out int userAnswer) && userAnswer == correctAnswer)
+			{
+				Console.WriteLine ("Correct!");
+				score++;
+			}
+			else
+			{
+				Console.WriteLine ($"Incorrect! The answer was {correctAnswer}.");
+			}
+		}
+
+		if(totalQuestions / 2 <= (score+1))
+		{
+			Console.WriteLine ($"You win! Your score: {score}/{totalQuestions}");
+		}
+		else 
+		{
+			Console.WriteLine ($"You Lose... Your score: {score}/{totalQuestions}");
 		}
 	}
 }
