@@ -3,6 +3,8 @@ class Program
 {
 	public static void Main ()
 	{
+		List<string> gameHistory = new List<string>();
+
 		var active = true;
 		while (active)
 		{
@@ -20,23 +22,34 @@ class Program
 			switch (option)
 			{
 				case "1":
-					game ('+');
+					game ('+', gameHistory);
 					break;
 
 				case "2":
-					game ('-');
+					game ('-', gameHistory);
 					break;
 
 				case "3":
-					game ('*');
+					game ('*', gameHistory);
 					break;
 
 				case "4":
-					game ('/');
+					game ('/', gameHistory);
 					break;
 
 				case "5":
-					Console.WriteLine ("You selected Game History.");
+					Console.WriteLine ("Your game history this session is:");
+					if(gameHistory.Count == 0)
+					{
+						Console.WriteLine("No game played yet");
+					}
+					else
+					{
+						foreach(string result in gameHistory)
+						{
+							Console.WriteLine(result);
+						}
+					}
 					break;
 
 				case "0":
@@ -51,7 +64,7 @@ class Program
 		}
 	}
 
-	static void game (char choice)
+	static void game (char choice, List<string> gameHistory)
 	{
 		Random random = new Random ();
 
@@ -113,13 +126,20 @@ class Program
 			}
 		}
 
-		if(totalQuestions / 2 <= (score+1))
+		string victory;
+
+		if(score >= (totalQuestions/2) + 1)
 		{
 			Console.WriteLine ($"You win! Your score: {score}/{totalQuestions}");
+			victory = "Win";
 		}
 		else 
 		{
 			Console.WriteLine ($"You Lose... Your score: {score}/{totalQuestions}");
+			victory = "Lose";
 		}
+		
+		var result = $"Mode: {choice} | Score: {score}/{totalQuestions} | {victory}";
+		gameHistory.Add(result);
 	}
 }
